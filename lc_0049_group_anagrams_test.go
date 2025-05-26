@@ -21,7 +21,7 @@ func Test_lc_0049_group_anagrams(t *testing.T) {
 		},
 	}
 	for _, c := range cases {
-		assert.True(t, checkEqualityWithFunc(c.output, lc_0049_group_anagrams(c.input), func(a, b []string) bool { return checkEquality(a, b) }))
+		assert.True(t, CheckEqualityWithFunc(c.output, lc_0049_group_anagrams(c.input), func(a, b []string) bool { return CheckEquality(a, b) }))
 	}
 }
 

@@ -1,10 +1,10 @@
 package main
 
-func checkEquality[T comparable](a1, a2 []T) bool {
-	return checkEqualityWithFunc(a1, a2, func(s1, s2 T) bool { return s1 == s2 })
+func CheckEquality[T comparable](a1, a2 []T) bool {
+	return CheckEqualityWithFunc(a1, a2, func(s1, s2 T) bool { return s1 == s2 })
 }
 
-func checkEqualityWithFunc[T any](a1, a2 []T, isEqual func(_, _ T) bool) bool {
+func CheckEqualityWithFunc[T any](a1, a2 []T, isEqual func(_, _ T) bool) bool {
 	if len(a1) != len(a2) {
 		return false
 	}

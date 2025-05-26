@@ -55,10 +55,10 @@ func Test_lc_0002_add_two_numbers(t *testing.T) {
 			},
 		},
 	}
-	assert.True(t, lc_0002_checkEquality(l3, lc_0002_add_two_numbers(l1, l2)))
-	assert.True(t, lc_0002_checkEquality(l5, lc_0002_add_two_numbers(l3, l4)))
-	assert.True(t, lc_0002_checkEquality(l3, lc_0002_add_two_numbers(nil, l3)))
-	assert.True(t, lc_0002_checkEquality(l5, lc_0002_add_two_numbers(l5, nil)))
+	assert.True(t, lc_0002_CheckEquality(l3, lc_0002_add_two_numbers(l1, l2)))
+	assert.True(t, lc_0002_CheckEquality(l5, lc_0002_add_two_numbers(l3, l4)))
+	assert.True(t, lc_0002_CheckEquality(l3, lc_0002_add_two_numbers(nil, l3)))
+	assert.True(t, lc_0002_CheckEquality(l5, lc_0002_add_two_numbers(l5, nil)))
 	assert.Nil(t, lc_0002_add_two_numbers(nil, nil))
 }
 
@@ -103,7 +103,7 @@ func lc_0002_add_two_numbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 }
 
-func lc_0002_checkEquality(l1, l2 *ListNode) bool {
+func lc_0002_CheckEquality(l1, l2 *ListNode) bool {
 	for {
 		switch {
 		case l1 == nil && l2 != nil:
