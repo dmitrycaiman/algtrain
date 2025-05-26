@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -66,20 +65,4 @@ func lc_0141_generateTestCase(length, pos int) *ListNode {
 		next.Next = ins
 	}
 	return root
-}
-
-// Unpack формирует строку связного списка от текущего узла до хвоста либо до позиции циклирования.
-func (slf *ListNode) Unpack() string {
-	m, res, next := map[*ListNode]struct{}{}, "", slf
-	for {
-		if _, ok := m[next]; ok {
-			return res + fmt.Sprintf("cycle(%v)", next.Val)
-		}
-		m[next] = struct{}{}
-		res += fmt.Sprintf("(%v)->", next.Val)
-		if next.Next == nil {
-			return res[:len(res)-2]
-		}
-		next = next.Next
-	}
 }

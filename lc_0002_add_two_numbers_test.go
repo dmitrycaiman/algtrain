@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -62,11 +61,6 @@ func Test_lc_0002_add_two_numbers(t *testing.T) {
 	assert.Nil(t, lc_0002_add_two_numbers(nil, nil))
 }
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
 func lc_0002_add_two_numbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	result := &ListNode{}
 	current := result
@@ -117,14 +111,4 @@ func lc_0002_CheckEquality(l1, l2 *ListNode) bool {
 		}
 		return false
 	}
-}
-
-func (slf *ListNode) String() (result string) {
-	result += "["
-	current := slf
-	for current != nil {
-		result += fmt.Sprint(current.Val, ",")
-		current = current.Next
-	}
-	return result[:len(result)-1] + "]"
 }
