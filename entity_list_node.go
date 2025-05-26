@@ -48,3 +48,17 @@ func (slf *ListNode) String() (result string) {
 		next = next.Next
 	}
 }
+
+// Reverse рекурсивно производит разворот связного списка и возвращает новый корень.
+func (slf *ListNode) Reverse() *ListNode {
+	if slf != nil && slf.Next != nil {
+		tail := slf.Next.Reverse()
+		slf.Next.Next = slf
+		if tail == nil {
+			tail = slf.Next
+		}
+		slf.Next = nil
+		return tail
+	}
+	return slf
+}
