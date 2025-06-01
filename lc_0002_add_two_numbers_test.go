@@ -7,7 +7,6 @@ import (
 )
 
 // https://leetcode.com/problems/add-two-numbers
-
 func Test_lc_0002_add_two_numbers(t *testing.T) {
 	l1 := &ListNode{
 		Val: 1,
