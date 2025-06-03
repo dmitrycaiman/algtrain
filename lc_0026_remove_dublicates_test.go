@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// https://leetcode.com/problems/remove-duplicates-from-sorted-array
 func Test_lc_0026_remove_dublicates(t *testing.T) {
 	cases := []struct {
 		input, output []int
