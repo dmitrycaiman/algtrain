@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// https://leetcode.com/problems/add-binary
 func Test_lc_0067_add_binary(t *testing.T) {
 	for range 100 {
 		a, b := rand.Intn(1000), rand.Intn(1000)
