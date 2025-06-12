@@ -8,11 +8,17 @@ import (
 
 // https://leetcode.com/problems/maximum-difference-between-adjacent-elements-in-a-circular-array
 func Test_lc_3423_maximum_difference_between_adjacent_elements_in_a_circular_array(t *testing.T) {
-	cases := []struct{}{}
+	cases := []struct {
+		input  []int
+		output int
+	}{
+		{[]int{1, 2, 3, 4, 5, 6}, 5},
+		{[]int{1, 2, 3, 6, 1}, 5},
+		{[]int{1, 2}, 1},
+		{[]int{1, 1, 1, 1, 1}, 0},
+	}
 	for _, c := range cases {
-		_ = c
-		//lc_3423_maximum_difference_between_adjacent_elements_in_a_circular_array()
-		assert.Equal(t, 1, 1)
+		assert.Equal(t, c.output, lc_3423_maximum_difference_between_adjacent_elements_in_a_circular_array(c.input))
 	}
 }
 
