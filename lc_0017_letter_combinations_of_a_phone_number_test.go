@@ -36,7 +36,7 @@ func lc_0017_letter_combinations_of_a_phone_number(digits string) []string {
 	if len(digits) == 0 {
 		return []string{}
 	}
-	return r(
+	return lc_0017(
 		nil,
 		digits,
 		map[byte][]byte{
@@ -53,10 +53,10 @@ func lc_0017_letter_combinations_of_a_phone_number(digits string) []string {
 	)
 }
 
-func r(row []byte, set string, m map[byte][]byte, storage []string) []string {
+func lc_0017(row []byte, set string, m map[byte][]byte, storage []string) []string {
 	if l := len(row); l != len(set) {
 		for _, v := range m[set[l]] {
-			storage = r(append(row, v), set, m, storage)
+			storage = lc_0017(append(row, v), set, m, storage)
 		}
 		return storage
 	}
