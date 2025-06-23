@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,9 +21,7 @@ func Test_lc_0018_4sum(t *testing.T) {
 		{[]int{0, 2, 2, 2, 10, -3, -9, 2, -10, -4, -9, -2, 2, 8, 7}, 6, [][]int{{-10, -2, 8, 10}, {-9, -3, 8, 10}, {-9, -2, 7, 10}, {-9, 0, 7, 8}, {-4, -2, 2, 10}, {-4, 0, 2, 8}, {-3, 0, 2, 7}, {0, 2, 2, 2}}},
 	}
 	for _, c := range cases {
-		rr := lc_0018_4sum(c.nums, c.target)
-		fmt.Println(rr, c)
-		assert.True(t, CheckEqualityWithFunc(rr, c.result, func(a, b []int) bool { return CheckEquality(a, b) }))
+		assert.True(t, CheckEqualityWithFunc(lc_0018_4sum(c.nums, c.target), c.result, func(a, b []int) bool { return CheckEquality(a, b) }))
 	}
 }
 
