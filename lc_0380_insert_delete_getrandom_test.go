@@ -8,7 +8,7 @@ import (
 )
 
 func Test_lc_0380_insert_delete_getrandom(t *testing.T) {
-	r := Constructor()
+	r := NewRandomizedSet()
 	max := 5
 	for i := range max {
 		assert.True(t, r.Insert(i))
@@ -36,7 +36,7 @@ type RandomizedSet struct {
 	m    map[int]int
 }
 
-func Constructor() RandomizedSet {
+func NewRandomizedSet() RandomizedSet {
 	return RandomizedSet{m: map[int]int{}, s: make([]int, 200_000)}
 }
 
