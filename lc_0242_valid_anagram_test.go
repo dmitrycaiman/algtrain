@@ -1,0 +1,43 @@
+package main
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+// https://leetcode.com/problems/valid-anagram
+func Test_lc_0242_valid_anagram(t *testing.T) {
+	cases := []struct {
+		s, t   string
+		result bool
+	}{
+		{"kobaaa", "kaboaa", true}, {"abcdef", "fedcba", true}, {"abcde", "fedcba", false}, {"anagram", "nagaram", true}, {"anagram", "naga", false},
+	}
+	for _, c := range cases {
+		assert.Equal(t, c.result, lc_0242_valid_anagram(c.s, c.t))
+	}
+}
+
+// 0ms (100%), 4.68MD (99.41%)
+// Складываем в мапу все символы первого слова, в значении используем количество их появления в слове.
+// Далее проходимся по символам второго слова и соответствующий элемент мапы уменьшаем на 1 или вовсе удаляем.
+// По итогу мапа должна стать пустой, что и скажет об успешности результата.
+func lc_0242_valid_anagram(s, t string) bool {
+	m := map[rune]int{}
+	for _, v := range s {
+		m[v]++
+	}
+	for _, v := range t {
+		n, ok := m[v]
+		switch {
+		case !ok:
+			return false
+		case n == 1:
+			delete(m, v)
+		default:
+			m[v]--
+		}
+	}
+	return len(m) == 0
+}
