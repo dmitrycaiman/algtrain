@@ -2,11 +2,25 @@ package main
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // https://leetcode.com/problems/rotate-list
 func Test_lc_0061_rotate_list(t *testing.T) {
-
+	cases := []struct {
+		input, output string
+		k             int
+	}{
+		{"1,2,3,4", "4,1,2,3", 1},
+		{"1,2,3,4", "3,4,1,2", 2},
+		{"1,2,3,4", "1,2,3,4", 4},
+		{"1,2,3,4", "1,2,3,4", 0},
+		{"1,2,3,4", "1,2,3,4", 400},
+	}
+	for _, c := range cases {
+		assert.Equal(t, c.output, lc_0061_rotate_list(NewList(c.input), c.k).String())
+	}
 }
 
 // 0ms (100%), 4.33MB (81.01%)
