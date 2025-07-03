@@ -41,7 +41,7 @@ func Test_alg_quicksort(t *testing.T) {
 	testFlow(alg_quicksort_2)
 }
 
-func alg_quicksort_1(input []int) {
+func alg_quicksort_1[T int | float64](input []T) {
 	switch len(input) {
 	case 0, 1:
 		return
@@ -69,7 +69,7 @@ func alg_quicksort_1(input []int) {
 	alg_quicksort_1(input[i:])
 }
 
-func alg_quicksort_2(input []int) {
+func alg_quicksort_2[T int | float64](input []T) {
 	i, j, pivot := 0, len(input)-1, input[0]
 	for j > i {
 		switch {

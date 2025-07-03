@@ -20,7 +20,7 @@ func Test_alg_bubblesort(t *testing.T) {
 	}
 }
 
-func alg_bubblesort(in []int) []int {
+func alg_bubblesort[T int | float64](in []T) []T {
 	for {
 		swap := false
 		for i := 0; i <= len(in)-2; i++ {

@@ -27,14 +27,15 @@ func Test_r256_total_amount(t *testing.T) {
 		{[]float64{300, 100, 200, 300, 200, 300}, 1100},
 	}
 	for _, c := range cases {
-		assert.Equal(t, c.total, r256_total_amount(c.prices))
+		assert.Equal(t, c.total, r256_total_amount_1(c.prices))
+		assert.Equal(t, c.total, r256_total_amount_2(c.prices))
 	}
 }
 
 // Создаём мапу, в которой ключ есть цена, значение есть количество товара.
 // Из каждого значения выделяем целочисленным делением количество троек и умножаем его на двойную цену. Остаток от деления умножаем на цену.
 // Всё складываем. По сути уменьшили все входящие тройки товаров до двоек.
-func r256_total_amount(prices []float64) (res float64) {
+func r256_total_amount_1(prices []float64) (res float64) {
 	m := map[float64]int{}
 	for _, price := range prices {
 		m[price]++
@@ -43,4 +44,32 @@ func r256_total_amount(prices []float64) (res float64) {
 		res += price * (2*float64(count/3) + float64(count%3))
 	}
 	return
+}
+
+// Решение без использования дополнительной памяти.
+// Основано на сортировке входного массива, что позволяет посчитать количество одинаковых товаров прямым проходом.
+func r256_total_amount_2(prices []float64) float64 {
+	for {
+		swap := false
+		for i := 0; i < len(prices)-1; i++ {
+			if prices[i] > prices[i+1] {
+				prices[i], prices[i+1] = prices[i+1], prices[i]
+				swap = true
+			}
+		}
+		if !swap {
+			break
+		}
+	}
+	price, count, res := float64(0), 0, float64(0)
+	for _, p := range prices {
+		if p != price {
+			res += price * (2*float64(count/3) + float64(count%3))
+			count = 1
+			price = p
+		} else {
+			count++
+		}
+	}
+	return res + price*(2*float64(count/3)+float64(count%3))
 }
