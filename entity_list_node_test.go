@@ -15,8 +15,6 @@ func TestNewList(t *testing.T) {
 		{"", ""},
 	}
 	for _, c := range cases {
-		_ = c
-		l := NewList(c.scheme)
-		assert.Equal(t, c.str, l.String())
+		assert.Equal(t, c.str, NewList(c.scheme).String())
 	}
 }
