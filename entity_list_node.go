@@ -11,6 +11,7 @@ type ListNode struct {
 	Next *ListNode
 }
 
+// NewList создаёт связный список согласно схеме. При обнаружении зацикливания результат будет возвращён сразу.
 func NewList(scheme string) *ListNode {
 	m, root := map[int]*ListNode{}, &ListNode{}
 	last := root
@@ -30,7 +31,7 @@ func NewList(scheme string) *ListNode {
 	return root.Next
 }
 
-// Unpack формирует строку связного списка от текущего узла до хвоста либо до позиции циклирования.
+// String формирует строку связного списка от текущего узла до хвоста либо до позиции циклирования.
 func (slf *ListNode) String() (result string) {
 	if slf == nil {
 		return ""
