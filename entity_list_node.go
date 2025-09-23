@@ -11,22 +11,43 @@ type ListNode struct {
 	Next *ListNode
 }
 
-// NewList создаёт связный список согласно схеме. При обнаружении зацикливания результат будет возвращён сразу.
+// NewList создаёт связный список согласно схеме. Узлы могут повторяться.
 func NewList(scheme string) *ListNode {
-	m, root := map[int]*ListNode{}, &ListNode{}
+	root := &ListNode{}
 	last := root
 	for _, v := range strings.Split(scheme, ",") {
 		n, err := strconv.Atoi(v)
 		if err != nil {
 			return nil
 		}
-		if existingNode, ok := m[n]; ok {
-			last.Next = existingNode
-			return root.Next
-		}
-		m[n] = &ListNode{Val: n}
-		last.Next = m[n]
+		last.Next = &ListNode{Val: n}
 		last = last.Next
+	}
+	return root.Next
+}
+
+// NewListWithCycle создаёт связный список согласно схеме. Зацикливание производится по указанной позиции.
+func NewListWithCycle(scheme string, pos int) *ListNode {
+	if pos < 0 {
+		return NewList(scheme)
+	}
+	root := &ListNode{}
+	last, length := root, 0
+	for _, v := range strings.Split(scheme, ",") {
+		n, err := strconv.Atoi(v)
+		if err != nil {
+			return nil
+		}
+		last.Next = &ListNode{Val: n}
+		last = last.Next
+		length++
+	}
+	if pos <= length {
+		cyclePos := root.Next
+		for range pos {
+			cyclePos = cyclePos.Next
+		}
+		last.Next = cyclePos
 	}
 	return root.Next
 }

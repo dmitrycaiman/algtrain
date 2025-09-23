@@ -7,11 +7,20 @@ import (
 )
 
 func Test_lc_0141_linked_list_cycle(t *testing.T) {
-	noCycle, withCycle := lc_0141_generateTestCase(10, -1), lc_0141_generateTestCase(10, 9)
-	assert.True(t, lc_0141_linked_list_cycle(withCycle))
-	assert.True(t, lc_0141_linked_list_cycle_naive(withCycle))
-	assert.False(t, lc_0141_linked_list_cycle(noCycle))
-	assert.False(t, lc_0141_linked_list_cycle_naive(noCycle))
+	cases := []struct {
+		list     string
+		cyclePos int
+		cycled   bool
+	}{
+		{"1,2,3", 0, true},
+		{"1,2,3", 1, true},
+		{"1,2,3", 2, true},
+		{"1,2,3", 3, false},
+	}
+	for _, c := range cases {
+		assert.Equal(t, c.cycled, lc_0141_linked_list_cycle(NewListWithCycle(c.list, c.cyclePos)))
+		assert.Equal(t, c.cycled, lc_0141_linked_list_cycle_naive(NewListWithCycle(c.list, c.cyclePos)))
+	}
 }
 
 // Решение по типу "Черепаха и Заяц". Суть в том, чтобы запустить по списку две метки с разной скоростью и ждать либо момента их встречи
@@ -33,36 +42,12 @@ func lc_0141_linked_list_cycle(head *ListNode) bool {
 // Наивное решение перебором с сохранением указателей на уже просмотренные узлы в хеш-таблице.
 func lc_0141_linked_list_cycle_naive(head *ListNode) bool {
 	m := map[*ListNode]struct{}{}
-	for {
-		if head != nil {
-			if _, ok := m[head]; ok {
-				return true
-			}
-			m[head] = struct{}{}
-			head = head.Next
-		} else {
-			break
+	for head != nil {
+		if _, ok := m[head]; ok {
+			return true
 		}
+		m[head] = struct{}{}
+		head = head.Next
 	}
 	return false
-}
-
-// lc_0141_generateTestCase генерирует связный список длины length с позицией циклирования pos. Возможно зацикливание хвоста на себя.
-func lc_0141_generateTestCase(length, pos int) *ListNode {
-	root := &ListNode{Val: 0}
-	next := root
-	var ins *ListNode
-	for i := range length {
-		if i == pos {
-			ins = next
-		}
-		if i != length-1 {
-			next.Next = &ListNode{Val: i + 1}
-			next = next.Next
-		}
-	}
-	if ins != nil {
-		next.Next = ins
-	}
-	return root
 }
