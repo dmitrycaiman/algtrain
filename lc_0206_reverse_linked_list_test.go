@@ -36,13 +36,11 @@ func lc_0206_reverse_linked_list_recur(head *ListNode) *ListNode {
 // 4. Делаем текущий узел предыдущим и следующий текущим.
 // 5. Повторяем процедуру.
 func lc_0206_reverse_linked_list_iter(head *ListNode) *ListNode {
-	var prev, next *ListNode
+	var prev *ListNode
 	for {
 		if head == nil {
 			return prev
 		}
-		next, head.Next, prev = head.Next, prev, head
-		prev = head
-		head = next
+		head, head.Next, prev = head.Next, prev, head
 	}
 }
