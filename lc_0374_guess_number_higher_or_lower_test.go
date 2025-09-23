@@ -31,7 +31,7 @@ func lc_0374_guess_number_higher_or_lower(n int) int {
 		if a == b {
 			return a
 		}
-		g := (b-a)/2 + a + 1
+		g := (b-a)/2 + a
 		switch lc_0374_guess(g) {
 		case 0:
 			return g
