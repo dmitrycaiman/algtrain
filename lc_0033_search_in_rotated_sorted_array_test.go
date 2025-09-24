@@ -26,10 +26,11 @@ func Test_lc_0033_search_in_rotated_sorted_array(t *testing.T) {
 	for _, c := range cases {
 		t.Run(fmt.Sprint(c), func(t *testing.T) {
 			for i, v := range c {
-				assert.Equal(t, i, lc_0033_search_in_rotated_sorted_array(c, v))
+				assert.Equal(t, i, lc_0033_search_in_rotated_sorted_array_1(c, v))
+				assert.Equal(t, i, lc_0033_search_in_rotated_sorted_array_2(c, v))
 			}
-			assert.Equal(t, -1, lc_0033_search_in_rotated_sorted_array(c, 10))
-			assert.Equal(t, -1, lc_0033_search_in_rotated_sorted_array(c, -1))
+			assert.Equal(t, -1, lc_0033_search_in_rotated_sorted_array_1(c, 10))
+			assert.Equal(t, -1, lc_0033_search_in_rotated_sorted_array_2(c, 10))
 		},
 		)
 	}
@@ -44,7 +45,7 @@ func Test_lc_0033_search_in_rotated_sorted_array(t *testing.T) {
 // 5. Сдвигаем границы в сторону половины, в которой предположительно есть элемент.
 // 6. Повторить с п. 1, пока не сократим область поиска до 3-х элементов: в этом случае вычисляем наличие целевого элемента сранением.
 // Если область поиска оказалась отсортированной, действуем как при бинарном поиске.
-func lc_0033_search_in_rotated_sorted_array(nums []int, target int) int {
+func lc_0033_search_in_rotated_sorted_array_1(nums []int, target int) int {
 	a, b, turnLeft := 0, len(nums)-1, false
 	for {
 		m := a + (b-a)/2
@@ -68,6 +69,39 @@ func lc_0033_search_in_rotated_sorted_array(nums []int, target int) int {
 			b = m - 1
 		} else {
 			a = m + 1
+		}
+	}
+}
+
+// Бинарный поиск с той особенностью, что мы определяем направление сдвига границ по отсортированной половине массива.
+// Отсортированной является та половина, на которой нет "перелома", то есть начала массива, которое сдвинулось.
+// В рамках отсортированной половины мы можем понять, принадлежит ли ей целевой элемент.
+func lc_0033_search_in_rotated_sorted_array_2(nums []int, target int) int {
+	a, b, m := 0, len(nums)-1, 0
+	for {
+		if a == b {
+			if nums[a] == target {
+				return a
+			} else {
+				return -1
+			}
+		}
+		m = a + (b-a)/2
+		switch {
+		case nums[m] == target:
+			return m
+		case nums[a] <= nums[m]: // Точка "перелома" справа.
+			if nums[a] <= target && target < nums[m] { // Проверяем принадлежность левой половине.
+				b = m
+			} else {
+				a = m + 1
+			}
+		case nums[a] > nums[m]: // Точка "перелома" слева.
+			if nums[m] < target && target <= nums[b] { // Проверяем принадлежность правой половине.
+				a = m + 1
+			} else {
+				b = m
+			}
 		}
 	}
 }
