@@ -35,12 +35,6 @@ func lc_0108_convert_sorted_array_to_binary_search_tree(nums []int) *TreeNode {
 	return root
 }
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
 func unpackTree(src []*TreeNode, dst *[]string) {
 	newSrc := []*TreeNode{}
 	for _, v := range src {
