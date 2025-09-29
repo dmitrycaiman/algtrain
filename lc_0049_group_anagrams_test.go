@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// https://leetcode.com/problems/group-anagrams
 func Test_lc_0049_group_anagrams(t *testing.T) {
 	cases := []struct {
 		input  []string
@@ -25,6 +26,9 @@ func Test_lc_0049_group_anagrams(t *testing.T) {
 	}
 }
 
+// Создаём хеш-таблицу с ключом-строкой и значением в виде массива строк.
+// Сортируем каждую строку. Отсортированные анаграммы выглядят одинаково, и это будет ключ для хеш-таблицы.
+// По ключу кладём исходную строку в соответствующий массив. В качестве результата возвращаем все получившиеся массивы.
 func lc_0049_group_anagrams(strs []string) [][]string {
 	sort := func(in []byte) string {
 		for {
