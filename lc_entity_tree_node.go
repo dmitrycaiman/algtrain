@@ -51,7 +51,7 @@ func (slf *TreeNode) String() string {
 		}
 		i++
 	}
-	return result
+	return result[1:]
 }
 func (slf *TreeNode) NodesCount() int { return slf.num(0) }
 
