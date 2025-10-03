@@ -1,12 +1,12 @@
 package main
 
 import (
-	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
+// https://leetcode.com/problems/longest-repeating-character-replacement
 func Test_lc_0424_longest_repeating_character_replacement(t *testing.T) {
 	cases := []struct {
 		s         string
@@ -24,55 +24,41 @@ func Test_lc_0424_longest_repeating_character_replacement(t *testing.T) {
 	}
 }
 
+// Скользящее окно. Формируем набор уникальных символов входной строки и применяем алгоритм для кажого из них.
+// Суть: расширяем окно вправо и следим за тем, сколько в нём символов, не равных ключевому.
+// Как только символов станет максимально возможное количество, окно окажется на грани валидности.
+// Такое окно может расширяться только через ключевые символы. При встрече неключевого символа двигаем левую границу до тех пор,
+// пока число неключевых символов в подстроке станет равно максимально возможному.
+// На каждой итерации, когда окно валидно или находится на грани, считаем полученную длину. Возвращаем максимальную длину после всех проходов.
 func lc_0424_longest_repeating_character_replacement(s string, k int) int {
-	m, keys := map[byte]int{}, []byte{}
+	syms := map[byte]struct{}{}
 	for i := range s {
-		if _, ok := m[s[i]]; !ok {
-			keys = append(keys, s[i])
-		}
-		m[s[i]]++
+		syms[s[i]] = struct{}{}
 	}
-	slices.SortFunc(
-		keys,
-		func(a, b byte) int {
-			switch {
-			case m[a] < m[b]:
-				return 1
-			case m[a] > m[b]:
-				return -1
-			default:
-				return 0
-			}
-		},
-	)
 	maxLength := 0
-	for _, key := range keys {
-		if m[key]+k <= maxLength {
-			break
-		}
-		counter, length := k, 0
-		for i, j := 0, 0; j < len(s); j++ {
-			if s[j] != key {
-				counter--
-			}
-			if counter == -1 {
-				if length > maxLength {
-					maxLength = length
-				}
-				if s[i] == key {
-					for s[i] == key {
+	for sym := range syms {
+		wrongSymCounter := 0
+		for i, j := 0, 0; j < len(s); {
+			switch {
+			case s[j] == sym:
+			case wrongSymCounter == k:
+				for {
+					if s[i] != sym {
+						wrongSymCounter--
 						i++
-						length--
+						break
 					}
+					i++
 				}
-				i++
-				length--
-				counter++
+				continue
+			case s[j] != sym:
+				wrongSymCounter++
 			}
-			length++
-		}
-		if length > maxLength {
-			maxLength = length
+			if length := j - i + 1; length > maxLength {
+				maxLength = length
+			}
+			j++
+
 		}
 	}
 	return maxLength
