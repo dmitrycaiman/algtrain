@@ -19,9 +19,10 @@ func Test_lc_0242_valid_anagram(t *testing.T) {
 	}
 }
 
-// 0ms (100%), 4.68MD (99.41%)
+// 0ms (100%), 4.68MB (99.41%)
 // Складываем в мапу все символы первого слова, в значении используем количество их появления в слове.
 // Далее проходимся по символам второго слова и соответствующий элемент мапы уменьшаем на 1 или вовсе удаляем.
+// Сразу выходим с неудачей, если текущего символа нет в мапе.
 // По итогу мапа должна стать пустой, что и скажет об успешности результата.
 func lc_0242_valid_anagram(s, t string) bool {
 	m := map[rune]int{}
@@ -29,14 +30,12 @@ func lc_0242_valid_anagram(s, t string) bool {
 		m[v]++
 	}
 	for _, v := range t {
-		n, ok := m[v]
-		switch {
-		case !ok:
-			return false
-		case n == 1:
+		m[v]--
+		switch m[v] {
+		case 0:
 			delete(m, v)
-		default:
-			m[v]--
+		case -1:
+			return false
 		}
 	}
 	return len(m) == 0
