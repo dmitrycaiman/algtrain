@@ -1,6 +1,7 @@
 package main
 
 import (
+	"slices"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,8 +22,32 @@ func Test_lc_0018_4sum(t *testing.T) {
 		{[]int{0, 2, 2, 2, 10, -3, -9, 2, -10, -4, -9, -2, 2, 8, 7}, 6, [][]int{{-10, -2, 8, 10}, {-9, -3, 8, 10}, {-9, -2, 7, 10}, {-9, 0, 7, 8}, {-4, -2, 2, 10}, {-4, 0, 2, 8}, {-3, 0, 2, 7}, {0, 2, 2, 2}}},
 	}
 	for _, c := range cases {
-		assert.True(t, CheckEqualityWithFunc(lc_0018_4sum(c.nums, c.target), c.result, func(a, b []int) bool { return CheckEquality(a, b) }))
+		assert.True(t, CheckEqualityWithFunc(lc_0018_4sum_1(c.nums, c.target), c.result, func(a, b []int) bool { return CheckEquality(a, b) }))
+		assert.True(t, CheckEqualityWithFunc(lc_0018_4sum_2(c.nums, c.target), c.result, func(a, b []int) bool { return CheckEquality(a, b) }))
 	}
+}
+
+func lc_0018_4sum_2(nums []int, target int) [][]int {
+	slices.Sort(nums)
+	m, result := map[[4]int]struct{}{}, [][]int{}
+	for i := 0; i <= len(nums)-4; i++ {
+		for j := i + 1; j <= len(nums)-3; j++ {
+			for k := j + 1; k <= len(nums)-2; k++ {
+				for t := k + 1; t <= len(nums)-1; t++ {
+					q := nums[i] + nums[j] + nums[k] + nums[t]
+					if q == target {
+						if _, ok := m[[4]int{nums[i], nums[j], nums[k], nums[t]}]; !ok {
+							m[[4]int{nums[i], nums[j], nums[k], nums[t]}] = struct{}{}
+							result = append(result, []int{nums[i], nums[j], nums[k], nums[t]})
+						}
+					} else if q > target {
+						break
+					}
+				}
+			}
+		}
+	}
+	return result
 }
 
 // 1319ms (5.03%), 10.94MB (5.03%)
@@ -33,7 +58,7 @@ func Test_lc_0018_4sum(t *testing.T) {
 // 1. Хранении структуры с сортированными значениями в мапе.
 // 2. Удалении значений с более чем 4-мя копиями.
 // Это позволило пройти тесты, но на самом низком уровне. Решение ТРЕБУЕТ ДОРАБОТКИ.
-func lc_0018_4sum(nums []int, target int) [][]int {
+func lc_0018_4sum_1(nums []int, target int) [][]int {
 	return r(prepare(nums), target, []int{}, [][]int{}, map[quad]struct{}{})
 }
 
