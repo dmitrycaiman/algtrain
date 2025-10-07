@@ -60,9 +60,3 @@ func lc_0356_line_reflection(points [][]int) bool {
 	}
 	return true
 }
-
-// |
-// |  * *
-// |*     *
-// |_*___*_____
-// 0 1 2 3 4 5
