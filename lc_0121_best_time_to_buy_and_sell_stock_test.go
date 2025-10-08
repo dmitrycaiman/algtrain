@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock
 func Test_lc_0121_best_time_to_buy_and_sell_stock(t *testing.T) {
 	assert.Equal(t, 5, lc_0121_best_time_to_buy_and_sell_stock([]int{1, 6, 5, 0, 3, 2}))
 	assert.Equal(t, 0, lc_0121_best_time_to_buy_and_sell_stock([]int{8, 6, 5, 4, 3, 2}))
@@ -14,15 +15,17 @@ func Test_lc_0121_best_time_to_buy_and_sell_stock(t *testing.T) {
 
 }
 
+// Жадная задача. Итерируемся по массиву и либо запоминаем и обновляем наименьшее число,
+// либо вычисляем разницу между элементом и текущим наименьшим числом.
+// Возвращаем наилучший результат.
 func lc_0121_best_time_to_buy_and_sell_stock(prices []int) int {
-	min, res := prices[0], 0
-	for i := 1; i <= len(prices)-1; i++ {
-		if delta := prices[i] - min; delta > res {
-			res = delta
-		}
-		if prices[i] < min {
-			min = prices[i]
+	min, result := prices[0], 0
+	for _, v := range prices {
+		if v < min {
+			min = v
+		} else if diff := v - min; diff > result {
+			result = diff
 		}
 	}
-	return res
+	return result
 }
