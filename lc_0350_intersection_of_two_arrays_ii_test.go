@@ -11,6 +11,8 @@ import (
 func Test_lc_0350_intersection_of_two_arrays_ii(t *testing.T) {
 	cases := []struct{ nums1, nums2, result []int }{
 		{[]int{2, 6, 4, 4, 1, 1, 9}, []int{1, 1, 1, 1, 9, 9, 6}, []int{1, 1, 6, 9}},
+		{[]int{2, 6, 4, 4, 1, 1}, []int{1, 1, 1, 1, 9, 9, 6}, []int{1, 1, 6}},
+		{[]int{2}, []int{2, 2, 3, 2}, []int{2}},
 	}
 	for _, c := range cases {
 		assert.Equal(t, c.result, lc_0350_intersection_of_two_arrays_ii(c.nums1, c.nums2))
