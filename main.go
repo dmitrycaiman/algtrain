@@ -52,7 +52,20 @@ func generateLeetcodeTemplate(leetCodeName *string) {
 		num,
 		string(newSlug),
 	)
-	os.WriteFile(name+"_test.go", []byte(strings.ReplaceAll(simpleTemplate, "$", name)), os.ModePerm)
+
+	os.WriteFile(
+		name+"_test.go",
+		[]byte(
+			strings.ReplaceAll(
+				strings.ReplaceAll(
+					simpleTemplate,
+					"https://",
+					"https://leetcode.com/problems/"+strings.ReplaceAll(string(newSlug[1:]), "_", "-")),
+				"$",
+				name,
+			),
+		), os.ModePerm,
+	)
 }
 
 func generateSimpleTemplate(fullName *string) {
@@ -63,8 +76,7 @@ func generateSimpleTemplate(fullName *string) {
 	os.WriteFile(name+"_test.go", []byte(strings.ReplaceAll(simpleTemplate, "$", name)), os.ModePerm)
 }
 
-const simpleTemplate = `
-package main
+const simpleTemplate = `package main
 
 import (
 	"testing"
