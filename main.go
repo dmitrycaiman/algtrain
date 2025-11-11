@@ -1,21 +1,64 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
+
+	"golang.org/x/net/html"
 )
 
 func main() {
 	fullName := flag.String("g", "", "generate simple template for algo-task testing by full task name")
-	leetCodeName := flag.String("l", "", "generate template for LeetCode algo-task testing by name")
+	leetCodeName := flag.String("lc", "", "generate template for LeetCode algo-task testing by name")
+	codeRunName := flag.String("cr", "", "generate template for CodeRun algo-task testing by name")
 	flag.Parse()
 
 	generateSimpleTemplate(fullName)
 	generateLeetcodeTemplate(leetCodeName)
+	generateCodeRunTemplate(codeRunName)
+}
+
+func generateCodeRunTemplate(codeRunName *string) {
+	name := *codeRunName
+	if name == "" {
+		return
+	}
+
+	res, err := http.Get(name)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
+
+	t := html.NewTokenizer(res.Body)
+	for tokenType := t.Next(); tokenType != html.ErrorToken; tokenType = t.Next() {
+		if tokenType == html.TextToken {
+			token := t.Token()
+			if token.Data[0] == '{' && token.Data[len(token.Data)-1] == '}' {
+				fields := map[string]any{}
+				if err = json.Unmarshal([]byte(token.Data), &fields); err != nil {
+					continue
+				}
+				slug := fields["query"].(map[string]any)["slug"].([]any)[0].(string)
+				writeTemplate(
+					codeRunTemplate,
+					"https://coderun.yandex.ru/problem/"+slug,
+					fmt.Sprintf(
+						"cr_%04.0f_%s",
+						fields["props"].(map[string]any)["pageProps"].(map[string]any)["values"].(map[string]any)["2pxafbfw"].(map[string]any)["number"].(float64),
+						strings.ReplaceAll(slug, "-", "_"),
+					),
+				)
+				return
+			}
+		}
+	}
 }
 
 func generateLeetcodeTemplate(leetCodeName *string) {
@@ -47,24 +90,14 @@ func generateLeetcodeTemplate(leetCodeName *string) {
 		prevSym = v
 		newSlug = append(newSlug, byte(v))
 	}
-	name = fmt.Sprintf(
-		"lc_%04d%s",
-		num,
-		string(newSlug),
-	)
-
-	os.WriteFile(
-		name+"_test.go",
-		[]byte(
-			strings.ReplaceAll(
-				strings.ReplaceAll(
-					simpleTemplate,
-					"https://",
-					"https://leetcode.com/problems/"+strings.ReplaceAll(string(newSlug[1:]), "_", "-")),
-				"$",
-				name,
-			),
-		), os.ModePerm,
+	writeTemplate(
+		simpleTemplate,
+		"https://leetcode.com/problems/"+strings.ReplaceAll(string(newSlug[1:]), "_", "-"),
+		fmt.Sprintf(
+			"lc_%04d%s",
+			num,
+			string(newSlug),
+		),
 	)
 }
 
@@ -73,7 +106,15 @@ func generateSimpleTemplate(fullName *string) {
 	if name == "" {
 		return
 	}
-	os.WriteFile(name+"_test.go", []byte(strings.ReplaceAll(simpleTemplate, "$", name)), os.ModePerm)
+	writeTemplate(simpleTemplate, "", name)
+}
+
+func writeTemplate(template, link, fileName string) {
+	os.WriteFile(
+		fileName+"_test.go",
+		[]byte(strings.ReplaceAll(strings.ReplaceAll(template, "https://", link), "$", fileName)),
+		os.ModePerm,
+	)
 }
 
 const simpleTemplate = `package main
@@ -96,4 +137,45 @@ func Test_$(t *testing.T) {
 
 // Описание решения...
 func $()  {}
+`
+
+const codeRunTemplate = `package main
+
+import (
+	"bufio"
+	"bytes"
+	"io"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+// https://
+func Test_$(t *testing.T) {
+	cases := []struct{ input, output string }{
+		{
+			"",
+			"",
+		},
+	}
+	for _, c := range cases {
+		w := bytes.NewBuffer(nil)
+		$(bytes.NewBufferString(c.input), w)
+		result, err := io.ReadAll(w)
+		assert.NoError(t, err)
+		assert.Equal(t, c.output, string(result))
+	}
+}
+
+// func main() {
+//   $(os.Stdin, os.Stdout)
+// }
+
+// Описание решения...
+func $(r io.Reader, w io.Writer) {
+	reader := bufio.NewReaderSize(r, 1<<20)
+	writer := bufio.NewWriterSize(w, 1<<20)
+	defer writer.Flush()
+	_ = reader
+}
 `

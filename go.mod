@@ -1,8 +1,13 @@
 module algtrain
 
-go 1.23.7
+go 1.24.0
 
-require github.com/stretchr/testify v1.10.0
+toolchain go1.24.10
+
+require (
+	github.com/stretchr/testify v1.10.0
+	golang.org/x/net v0.46.0
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
