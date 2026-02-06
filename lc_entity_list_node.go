@@ -13,17 +13,22 @@ type ListNode struct {
 
 // NewList создаёт связный список согласно схеме. Узлы могут повторяться.
 func NewList(scheme string) *ListNode {
+	root, _ := NewListWithTail(scheme)
+	return root
+}
+
+func NewListWithTail(scheme string) (*ListNode, *ListNode) {
 	root := &ListNode{}
 	last := root
 	for _, v := range strings.Split(scheme, ",") {
 		n, err := strconv.Atoi(v)
 		if err != nil {
-			return nil
+			return nil, nil
 		}
 		last.Next = &ListNode{Val: n}
 		last = last.Next
 	}
-	return root.Next
+	return root.Next, last
 }
 
 // NewListWithCycle создаёт связный список согласно схеме. Зацикливание производится по указанной позиции.
