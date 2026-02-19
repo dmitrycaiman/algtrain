@@ -19,7 +19,7 @@ func Test_lc_0226_invert_binary_tree(t *testing.T) {
 	}
 }
 
-// Обходим дерево preorder. Меняем узлы местами, когда не идём налево или когда в листе.
+// Обходим дерево preorder. Меняем узлы местами, когда должны идти направо.
 func lc_0226_invert_binary_tree(root *TreeNode) *TreeNode {
 	if root == nil {
 		return nil
